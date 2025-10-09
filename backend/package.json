@@ -13,8 +13,10 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@jsforce/jsforce-node": "^3.10.8",
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "jsforce": "^3.10.8"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
