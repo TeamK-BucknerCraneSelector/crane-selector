@@ -13,6 +13,8 @@ app.use(cors(corsOptions));
 // JSForce
 const conn = new jsforce.Connection();
 
+const cranes = require('./cranes.json');
+
 // Generic AXIOS request w/ dummy data
 app.get("/api", (req, res) => {
   res.json({ fruits: ["apple", "lemon", "strawberry", "pineapple"] });
