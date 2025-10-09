@@ -1,32 +1,38 @@
-{
-    "LIEBHERR LTR 1100": {
+[
+    {
+        "model": "LIEBHERR LTR 1100",
         "max_load": 110,
         "max_height": 272,
         "max_radius": 195
     },
-    "LIEBHERR LTR 1150": {
+    {
+        "model": "LIEBHERR LTR 1150",
         "max_load": 170,
         "max_height": 272,
         "max_radius": 249
     },
-    "LIEBHERR LTR 1220": {
+    {
+        "model": "LIEBHERR LTR 1220",
         "max_load": 250,
         "max_height": 331,
         "max_radius": 289
     },
-    "LIEBHERR LR 1300": {
+    {
+        "model": "LIEBHERR LR 1300",
         "max_load": 330,
         "max_height": -1,
         "max_radius": -1
     },
-    "LIEBHERR LR 1400": {
+    {
+        "model": "LIEBHERR LR 1400",
         "max_load": 440,
         "max_height": -1,
         "max_radius": -1
     },
-    "LIEBHERR LR 1500": {
+    {
+        "model": "LIEBHERR LR 1500",
         "max_load": 550,
         "max_height": -1,
         "max_radius": -1
     }
-}
+]

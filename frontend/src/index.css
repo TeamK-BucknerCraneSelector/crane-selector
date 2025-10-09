@@ -2,14 +2,12 @@
 @import "tailwindcss";
 @import "@radix-ui/themes/styles.css";
 
-
 :root {
   font-family: "Work Sans", sans-serif;
   line-height: 1.5;
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
-
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -26,4 +24,27 @@
   --burgundy-10: #521a1e;
   --burgundy-11: #3a1315;
   --burgundy-12: #1f0a0a;
+}
+
+/* Custom background image class - can't be done with inline Tailwind */
+.bg-crane-hero {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                    url('https://bucknerheavylift.com/wp-content/uploads/2016/07/internal-header-16-heavylift-1.jpg');
+}
+
+/* Custom hover transitions */
+.transition-colors {
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+/* Remove default link styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Ensure buttons inside links display correctly */
+a button {
+  display: block;
+  width: 100%;
 }
