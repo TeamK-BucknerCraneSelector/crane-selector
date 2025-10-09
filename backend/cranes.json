@@ -32,7 +32,43 @@
     {
         "model": "LIEBHERR LR 1500",
         "max_load": 550,
+        "max_height": 538,
+        "max_radius": 472
+    }, 
+    {
+        "model": "LIEBHERR LR 1600",
+        "max_load": -1,
         "max_height": -1,
         "max_radius": -1
+    }, 
+    {
+        "model": "LIEBHERR LG 1750",
+        "max_load": -1,
+        "max_height": -1,
+        "max_radius": -1
+    }, 
+    {
+        "model": "LIEBHERR LR 1800",
+        "max_load": -1,
+        "max_height": -1,
+        "max_radius": -1
+    }, 
+    {
+        "model": "LIEBHERR LR 11000",
+        "max_load": 1200,
+        "max_height": 722,
+        "max_radius": 603
+    }, 
+    {
+        "model": "LIEBHERR LR 11350",
+        "max_load": 1500,
+        "max_height": 722,
+        "max_radius": 538
+    }, 
+    {
+        "model": "LIEBHERR LR 13000",
+        "max_load": 3300,
+        "max_height": 774,
+        "max_radius": 656
     }
 ]
