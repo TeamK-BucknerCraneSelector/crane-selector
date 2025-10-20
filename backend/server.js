@@ -9,6 +9,9 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Serve images statically
+app.use('/images', express.static('images'));
+
 // JSForce
 const loginUrl = process.env.LOGIN_URL;
 const username = process.env.USERNAME;
