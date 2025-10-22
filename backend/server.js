@@ -25,7 +25,7 @@ const conn = new jsforce.Connection({
 const cranes = require('./cranes.json');
 
 function distance(p1, p2) {
-  return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2) + Math.pow(p1[2], p2[2], 2));
+  return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2) + Math.pow(p1[2] - p2[2], 2));
 }
 
 // Generic AXIOS request w/ dummy data
@@ -33,15 +33,40 @@ app.get("/api", (req, res) => {
   res.json({ fruits: ["apple", "lemon", "strawberry", "pineapple"] });
 });
 
-app.get("/api/recommendation", (req, res) => {
-  const weight = parseInt(req.query.weight) || 0;
-  const height = parseInt(req.query.height) || 0;
-  const radius = parseInt(req.query.radius) || 0;
+// Get all available cranes
+app.get("/api/cranes", (req, res) => {
+  res.status(200).json(cranes);
+});
 
-  const suitable = cranes.filter((crane, index) => {
-    return crane.max_load >= weight && crane.max_height >= height && crane.max_radius >= radius;
+// RECOMMENDATION ENDPOINT
+app.get("/api/recommendation", (req, res) => {
+  // Extract user requirements from query parameters
+  // Example: /api/recommendation?weight=300&height=400&radius=200
+  const weight = parseInt(req.query.weight) || 0;  // Required lifting capacity in tons
+  const height = parseInt(req.query.height) || 0;  // Required lifting height in feet
+  const radius = parseInt(req.query.radius) || 0;  // Required horizontal reach in feet
+
+  // STEP 1: FILTER SUITABLE CRANES
+  // Only include cranes that meet or exceed ALL requirements
+  // A crane is suitable if:
+  //   - Its max_load is >= the required weight
+  //   - Its max_height is >= the required height
+  //   - Its max_radius is >= the required radius
+  const suitable = cranes.filter((crane) => {
+    return crane.max_load >= weight && 
+           crane.max_height >= height && 
+           crane.max_radius >= radius;
   });
 
+  // STEP 2: SORT BY BEST MATCH
+  // Sort cranes by "distance" from requirements
+  // The crane with the smallest distance is the best match
+  // 
+  // Distance calculation:
+  //   - Treat each crane's specs as 3 dimensional vector
+  //   - Treat user requirements as another point: (weight, height, radius)
+  //   - Calculate Euclidean distance between these points
+  //   - Lower distance = closer match = better recommendation
   suitable.sort((a, b) => {
     const a_list = [a.max_load, a.max_height, a.max_radius];
     const b_list = [b.max_load, b.max_height, b.max_radius];
@@ -49,6 +74,9 @@ app.get("/api/recommendation", (req, res) => {
     return distance(a_list, c_list) - distance(b_list, c_list);
   });
 
+  // STEP 3: RETURN TOP 3 RECOMMENDATIONS
+  // Return the 3 best-matching cranes
+  // This can be edited to return more or fewer recommendations, clarification during next standup
   res.status(200).json(suitable.slice(0, 3));
 })
 

@@ -26,10 +26,17 @@ function RequestFlow() {
   const fetchAvailableCranes = async () => {
     setLoading(true)
     try {
-      setCranes([
-        "LTR 1100", "LTR 1150", "LTR 1220", "LR 1300", "LR 1400", "LR 1500",
-        "LR 1600", "LG 1750", "LR 1800", "LR 11000", "LR 11350", "LR 13000",
-      ])
+      const response = await fetch('http://localhost:8080/api/cranes')
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch cranes')
+      }
+      
+      const data = await response.json()
+      
+      // Extract just the model names
+      const craneModels = data.map((crane: any) => crane.model)
+      setCranes(craneModels)
     } catch (error) {
       console.error('Error fetching cranes:', error)
     } finally {
@@ -132,7 +139,9 @@ function RequestFlow() {
                 disabled={loading}
                 className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:border-red-700 disabled:opacity-50"
               >
-                <option value="">Choose a crane model...</option>
+                <option value="">
+                  {loading ? 'Loading cranes...' : 'Choose a crane model...'}
+                </option>
                 {cranes.map((crane) => (
                   <option key={crane} value={crane}>{crane}</option>
                 ))}
