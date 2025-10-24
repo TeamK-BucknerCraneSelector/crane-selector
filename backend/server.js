@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const jsforce = require('jsforce');
 const cors = require("cors");
@@ -9,26 +10,56 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Body parser middleware for JSON
+app.use(express.json());
+
 // Serve images statically
 app.use('/images', express.static('images'));
 
-// JSForce
+// Salesforce Configuration
 const loginUrl = process.env.LOGIN_URL;
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 
-const conn = new jsforce.Connection({
-  loginUrl : loginUrl,
-});
-// const userInfo = await conn.login(username, password);
+// Salesforce connection instance
+let sfConnection = null;
 
+/**
+ * Get or create Salesforce connection
+ * Reuses existing connection if valid, otherwise creates new one
+ */
+async function getSalesforceConnection() {
+  if (sfConnection && sfConnection.accessToken) {
+    return sfConnection;
+  }
+  
+  const conn = new jsforce.Connection({
+    loginUrl: loginUrl
+  });
+  
+  try {
+    await conn.login(username, password);
+    sfConnection = conn;
+    console.log('Connected to Salesforce successfully');
+    return conn;
+  } catch (err) {
+    console.error('Salesforce login error:', err);
+    throw err;
+  }
+}
+
+// Load crane data
 const cranes = require('./cranes.json');
 
+/**
+ * Calculate Euclidean distance between two 3D points
+ * Used for finding closest matching crane to requirements
+ */
 function distance(p1, p2) {
   return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2) + Math.pow(p1[2] - p2[2], 2));
 }
 
-// Generic AXIOS request w/ dummy data
+// Generic test endpoint
 app.get("/api", (req, res) => {
   res.json({ fruits: ["apple", "lemon", "strawberry", "pineapple"] });
 });
@@ -78,7 +109,7 @@ app.get("/api/recommendation", (req, res) => {
   // Return the 3 best-matching cranes
   // This can be edited to return more or fewer recommendations, clarification during next standup
   res.status(200).json(suitable.slice(0, 3));
-})
+});
 
 app.listen(8080, () => {
   console.log("Server started on port 8080");
