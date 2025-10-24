@@ -34,20 +34,41 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+  e.preventDefault()
+  setLoading(true)
+  
+  try {
+    const response = await fetch('http://localhost:8080/api/submit-quote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        crane: selectedCrane,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        projectDetails: formData.projectDetails,
+        sourceFlow: 'Request Flow' // or 'Wizard Flow' depending on which flow called this
+      })
+    })
     
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log('Quote submitted:', { crane: selectedCrane, ...formData })
+    const data = await response.json()
+    
+    if (response.ok && data.success) {
+      console.log('Quote submitted to Salesforce:', data)
       onSubmit(formData)
-    } catch (error) {
-      console.error('Error submitting quote:', error)
-      alert('Failed to submit quote. Please try again.')
-    } finally {
-      setLoading(false)
+    } else {
+      throw new Error(data.error || 'Failed to submit quote')
     }
+  } catch (error) {
+    console.error('Error submitting quote:', error)
+    alert('Failed to submit quote. Please try again.')
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
