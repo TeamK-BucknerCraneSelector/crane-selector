@@ -12,14 +12,14 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
 
 ## Quick Start with Docker
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
+- Docker Desktop installed and running
 - Salesforce credentials (username, password, security token)
 
 ### Setup Steps
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/crane-selector.git
+   git clone https://github.com/TeamK-BucknerCraneSelector/crane-selector.git
    cd crane-selector
    ```
 
@@ -67,7 +67,7 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
 
 1. **Clone and setup environment**
    ```bash
-   git clone https://github.com/your-org/crane-selector.git
+   git clone https://github.com/TeamK-BucknerCraneSelector/crane-selector.git
    cd crane-selector
    cp backend/.env.example backend/.env
    ```
