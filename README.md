@@ -67,7 +67,7 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
 
 1. **Clone and setup environment**
    ```bash
-   git clone https://github.com/your-org/crane-selector.git
+   git clone https://github.com/TeamK-BucknerCraneSelector/crane-selector.git
    cd crane-selector
    cp backend/.env.example backend/.env
    ```
