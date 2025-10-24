@@ -91,7 +91,7 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
 4. **Open in your browser**
    - Frontend: http://localhost:5173
 
----
+--
 
 ## Getting Your Salesforce Security Token
 
