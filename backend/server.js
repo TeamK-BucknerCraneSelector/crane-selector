@@ -21,14 +21,24 @@ const loginUrl = process.env.LOGIN_URL;
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 
-// Verify environment variables are loaded
-if (!loginUrl || !username || !password) {
-  console.error('ERROR: Missing Salesforce environment variables!');
-  console.error('Please check your .env file contains:');
-  console.error('- LOGIN_URL');
-  console.error('- USERNAME');
-  console.error('- PASSWORD');
-  process.exit(1);
+if (require.main === module) {
+  // Verify environment variables are loaded
+  if (!loginUrl || !username || !password) {
+    console.error('ERROR: Missing Salesforce environment variables!');
+    console.error('Please check your .env file contains:');
+    console.error('- LOGIN_URL');
+    console.error('- USERNAME');
+    console.error('- PASSWORD');
+    process.exit(1);
+  } else {
+    // Start server
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+    console.log(`Salesforce Login URL: ${loginUrl}`);
+    console.log(`Salesforce Username: ${username}`);
+    });
+  }
 }
 
 // Salesforce connection instance
@@ -177,14 +187,6 @@ app.post("/api/submit-quote", async (req, res) => {
       details: error.message
     });
   }
-});
-
-// Start server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-  console.log(`Salesforce Login URL: ${loginUrl}`);
-  console.log(`Salesforce Username: ${username}`);
 });
 
 module.exports = {
