@@ -38,6 +38,7 @@ interface QuoteFormData {
 type WizardStep = "landing" | "wizard" | "recommendations" | "quote" | "confirmation"
 
 function WizardFlow() {
+  const API_URL = import.meta.env.VITE_API_URL
   const [currentStep, setCurrentStep] = useState<WizardStep>("landing")
   const [wizardStep, setWizardStep] = useState<number>(1)
   const [wizardData, setWizardData] = useState<WizardData>({
@@ -122,7 +123,7 @@ function WizardFlow() {
       const radius = parseRange(wizardData.radius)
       
       const response = await fetch(
-        `http://localhost:8080/api/recommendation?weight=${weight}&height=${height}&radius=${radius}`
+        `${API_URL}/api/recommendation?weight=${weight}&height=${height}&radius=${radius}`      
       )
       
       if (!response.ok) {
@@ -272,7 +273,7 @@ function WizardFlow() {
                   
                   <div className="relative w-full md:w-64 h-auto md:h-full bg-gray-200">
                     <img 
-                      src={`http://localhost:8080/${crane.imagePath}`}
+                      src={`${API_URL}/${crane.imagePath}`}
                       alt={crane.name}
                       className="w-full h-full object-cover object-bottom"
                       onError={(e) => {

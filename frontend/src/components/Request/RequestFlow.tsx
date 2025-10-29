@@ -4,6 +4,8 @@ import Header from '../shared/Header'
 import ConfirmationScreen from '../shared/ConfirmationScreen'
 import QuoteForm from '../../components/QuoteForm/QuoteForm'
 
+
+
 interface CraneData {
   crane: string
   name: string
@@ -22,6 +24,7 @@ interface Crane {
 }
 
 function RequestFlow() {
+  const API_URL = import.meta.env.VITE_API_URL
   const [currentStep, setCurrentStep] = useState<'landing' | 'quote' | 'confirmation'>('landing')
   const [cranes, setCranes] = useState<Crane[]>([])
   const [selectedCrane, setSelectedCrane] = useState<string>('')
@@ -35,7 +38,7 @@ function RequestFlow() {
   const fetchAvailableCranes = async () => {
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:8080/api/cranes')
+      const response = await fetch(`${API_URL}/api/cranes`)
       
       if (!response.ok) {
         throw new Error('Failed to fetch cranes')
@@ -127,7 +130,7 @@ function RequestFlow() {
                 >
                   <div className="relative h-100 bg-gray-200">
                     <img 
-                      src={`http://localhost:8080/${crane.image_path}`}
+                      src={`${API_URL}/${crane.image_path}`}
                       alt={crane.model}
                       className="w-full h-full object-cover object-bottom"
                       onError={(e) => {

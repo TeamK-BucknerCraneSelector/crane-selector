@@ -16,6 +16,7 @@ interface FormData {
 }
 
 function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
+  const API_URL = import.meta.env.VITE_API_URL
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -37,7 +38,7 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
     setLoading(true)
     
     try {
-      const response = await fetch('http://localhost:8080/api/submit-quote', {
+      const response = await fetch(`${API_URL}/api/submit-quote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
