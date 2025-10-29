@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import BucknerLogo from '../../assets/buckner.svg'
 import { Badge } from "@radix-ui/themes"
+import Header from '../shared/Header'
+import ConfirmationScreen from '../shared/ConfirmationScreen'
 import QuoteForm from '../QuoteForm/QuoteForm'
 
 interface WizardData {
-  projectType: string // This isn't sent to the backend
-  weight: string // upper bound of weight range
-  liftingHeight: string // upper bound of height range
-  radius: string // upper bound of radius range
-  environment: string // Not sent to backend either
+  projectType: string
+  weight: string
+  liftingHeight: string
+  radius: string
+  environment: string
 }
 
 interface CraneRecommendation {
@@ -17,7 +18,7 @@ interface CraneRecommendation {
   tonnage: string
   description: string
   features: string[]
-  bestFor: string // Linked to projectType
+  bestFor: string
   imagePath: string
   specs: {
     maxLoad: number
@@ -104,101 +105,72 @@ function WizardFlow() {
     return texts[projectType] || 'Various construction projects'
   }
 
-/**
- * Parse range string to get the upper bound value
- * Used to convert user-friendly ranges into API parameters
- * THIS USES UPPER BOUND, ASK IF THIS IS CORRECT APPROACH AT NEXT STANDUP
- * Examples:
- *   "0-50"   → 50   (use upper bound)
- *   "150-300" → 300  (use upper bound)
- *   "600+"   → 600  (use base value for open-ended ranges)
- */
-const parseRange = (range: string): number => {
-  // Handle open-ended ranges like "600+"
-  if (range.includes('+')) {
-    const base = parseInt(range.replace('+', ''))
-    return base
-  }
-  // Handle closed ranges like "150-300"
-  const parts = range.split('-')
-  return parseInt(parts[1])  // Return upper bound
-}
-
-/*
-  Fetch crane recommendations from backend
- 
-  Steps:
-  1. Convert user-selected ranges to numeric values
-  2. Send weight, height, and radius to backend API
-  3. Backend filters cranes that meet requirements
-  4. Backend sorts by best match (closest to requirements)
-  5. Backend returns top 3 recommendations, AGAIN, CONFIRM THIS NUMBER DURING NEXT STANDUP
-  6. Transform backend data into UI-friendly format
- */
-const fetchRecommendations = async () => {
-  setLoading(true)
-  try {
-    // Convert range strings to numbers
-    // User selects "150-300 tons" → becomes 300
-    // User selects "200-400 feet" → becomes 400
-    const weight = parseRange(wizardData.weight)
-    const height = parseRange(wizardData.liftingHeight)
-    const radius = parseRange(wizardData.radius)
-    
-    // Call backend API with numeric requirements
-    const response = await fetch(
-      `http://localhost:8080/api/recommendation?weight=${weight}&height=${height}&radius=${radius}`
-    )
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch recommendations')
+  const parseRange = (range: string): number => {
+    if (range.includes('+')) {
+      const base = parseInt(range.replace('+', ''))
+      return base
     }
-    
-    const cranes = await response.json()
-    
-    // Transform backend crane data into UI display format
-    const transformedRecommendations: CraneRecommendation[] = cranes.map((crane: any) => {
-      // Build features array with crane specifications
-      const features = [
-        `Max Load: ${crane.max_load} tons`,
-        `Max Height: ${crane.max_height}ft`,
-        `Max Radius: ${crane.max_radius}ft`
-      ]
-
-      // Add environment-specific features based on user's work environment
-      if (wizardData.environment === 'urban') {
-        features.push('Suitable for tight spaces')
-      } else if (wizardData.environment === 'industrial') {
-        features.push('Heavy-duty construction')
-      } else if (wizardData.environment === 'waterfront') {
-        features.push('Marine-rated equipment')
-      }
-
-      return {
-        name: crane.model,
-        tonnage: `${crane.max_load} Ton`,
-        description: `Maximum load capacity of ${crane.max_load} tons with ${crane.max_height}ft height and ${crane.max_radius}ft reach capability`,
-        features,
-        bestFor: getBestForText(wizardData.projectType),
-        imagePath: crane.image_path,
-        specs: {
-          maxLoad: crane.max_load,
-          maxHeight: crane.max_height,
-          maxRadius: crane.max_radius
-        }
-      }
-    })
-    
-    setRecommendations(transformedRecommendations)
-    setCurrentStep("recommendations")
-  } catch (error) {
-    console.error('Error fetching recommendations:', error)
-    alert('Failed to fetch recommendations from server. Please check that your backend is running.')
-    setRecommendations([])
-  } finally {
-    setLoading(false)
+    const parts = range.split('-')
+    return parseInt(parts[1])
   }
-}
+
+  const fetchRecommendations = async () => {
+    setLoading(true)
+    try {
+      const weight = parseRange(wizardData.weight)
+      const height = parseRange(wizardData.liftingHeight)
+      const radius = parseRange(wizardData.radius)
+      
+      const response = await fetch(
+        `http://localhost:8080/api/recommendation?weight=${weight}&height=${height}&radius=${radius}`
+      )
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch recommendations')
+      }
+      
+      const cranes = await response.json()
+      
+      const transformedRecommendations: CraneRecommendation[] = cranes.map((crane: any) => {
+        const features = [
+          `Max Load: ${crane.max_load} tons`,
+          `Max Height: ${crane.max_height}ft`,
+          `Max Radius: ${crane.max_radius}ft`
+        ]
+
+        if (wizardData.environment === 'urban') {
+          features.push('Suitable for tight spaces')
+        } else if (wizardData.environment === 'industrial') {
+          features.push('Heavy-duty construction')
+        } else if (wizardData.environment === 'waterfront') {
+          features.push('Marine-rated equipment')
+        }
+
+        return {
+          name: crane.model,
+          tonnage: `${crane.max_load} Ton`,
+          description: `Maximum load capacity of ${crane.max_load} tons with ${crane.max_height}ft height and ${crane.max_radius}ft reach capability`,
+          features,
+          bestFor: getBestForText(wizardData.projectType),
+          imagePath: crane.image_path,
+          specs: {
+            maxLoad: crane.max_load,
+            maxHeight: crane.max_height,
+            maxRadius: crane.max_radius
+          }
+        }
+      })
+      
+      setRecommendations(transformedRecommendations)
+      setCurrentStep("recommendations")
+    } catch (error) {
+      console.error('Error fetching recommendations:', error)
+      alert('Failed to fetch recommendations from server. Please check that your backend is running.')
+      setRecommendations([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleStartWizard = () => {
     setCurrentStep("wizard")
@@ -253,53 +225,21 @@ const fetchRecommendations = async () => {
     setRecommendations([])
   }
 
+  // Confirmation Screen
   if (currentStep === "confirmation" && quoteData) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-50">
-        <header className="flex flex-row h-[4.5rem] bg-white/90 w-full z-[2] text-gray-800 transition-colors tracking-wider shadow-sm">
-          <Link className="my-auto px-2" to="/">
-            <img className="w-auto h-8" src={BucknerLogo} alt="Buckner Logo" />
-          </Link>
-        </header>
-
-        <div className="flex flex-col items-center justify-center flex-grow p-8">
-          <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-5xl text-green-600">✓</span>
-            </div>
-            <h1 className="text-3xl font-bold mb-4 text-center">Quote Request Submitted!</h1>
-            <p className="text-gray-500 mb-6 text-center">
-              Thank you! We'll contact you within 24 hours with a detailed quote.
-            </p>
-
-            <div className="bg-gray-50 p-6 rounded-lg mb-6 text-left">
-              <h3 className="font-bold mb-3">Request Details:</h3>
-              <p className="mb-2"><strong>Crane:</strong> {selectedCrane}</p>
-              <p className="mb-2"><strong>Name:</strong> {quoteData.name}</p>
-              <p className="mb-2"><strong>Email:</strong> {quoteData.email}</p>
-              <p className="mb-2"><strong>Phone:</strong> {quoteData.phone}</p>
-              {quoteData.company && <p className="mb-2"><strong>Company:</strong> {quoteData.company}</p>}
-            </div>
-
-            <div className="flex gap-4">
-              <button 
-                onClick={handleStartOver} 
-                className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer bg-gray-700 text-white hover:bg-gray-800"
-              >
-                Request Another Quote
-              </button>
-              <Link to="/" className="flex-1">
-                <button className="w-full font-semibold py-3 px-6 rounded-lg transition-colors border-2 border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer">
-                  Back to Home
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ConfirmationScreen
+        craneName={selectedCrane}
+        customerName={quoteData.name}
+        email={quoteData.email}
+        phone={quoteData.phone}
+        company={quoteData.company}
+        onStartOver={handleStartOver}
+      />
     )
   }
 
+  // Quote Form
   if (currentStep === "quote") {
     return (
       <QuoteForm
@@ -310,14 +250,11 @@ const fetchRecommendations = async () => {
     )
   }
 
+  // Recommendations Page
   if (currentStep === "recommendations") {
     return (
       <div className="flex flex-col min-h-screen bg-gray-50">
-        <header className="flex flex-row h-[4.5rem] bg-white/90 w-full z-[2] text-gray-800 transition-colors tracking-wider shadow-sm">
-          <Link className="my-auto px-2" to="/">
-            <img className="w-auto h-8" src={BucknerLogo} alt="Buckner Logo" />
-          </Link>
-        </header>
+        <Header />
 
         <div className="max-w-5xl mx-auto p-8 w-full">
           <div className="text-center mb-8">
@@ -333,17 +270,18 @@ const fetchRecommendations = async () => {
               recommendations.map((crane, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-[auto_2fr_1fr] gap-6">
                   
-                 <div className="relative w-full md:w-64 h-auto md:h-full bg-gray-200">
+                  <div className="relative w-full md:w-64 h-auto md:h-full bg-gray-200">
                     <img 
-                    src={`http://localhost:8080/${crane.imagePath}`}
-                    alt={crane.name}
-                    className="w-full h-full object-cover object-bottom"
-                    onError={(e) => {
-                      e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Crane';
-                    }}
-                  />
-                </div>
-  <div className="flex flex-col gap-4 p-6">
+                      src={`http://localhost:8080/${crane.imagePath}`}
+                      alt={crane.name}
+                      className="w-full h-full object-cover object-bottom"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Crane';
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-4 p-6">
                     <div className="flex items-center gap-3 flex-wrap">
                       <h3 className="text-xl font-semibold m-0">{crane.name}</h3>
                       <Badge>{crane.tonnage}</Badge>
@@ -368,7 +306,7 @@ const fetchRecommendations = async () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-col justify-center items-center">
+                  <div className="flex flex-col justify-center items-center p-6">
                     <button
                       onClick={() => handleSelectCrane(crane)}
                       className="w-full font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer bg-gray-700 text-white hover:bg-gray-800"
@@ -412,14 +350,11 @@ const fetchRecommendations = async () => {
     )
   }
 
+  // Wizard Steps
   if (currentStep === "wizard") {
     return (
       <div className="flex flex-col min-h-screen bg-gray-50">
-        <header className="flex flex-row h-[4.5rem] bg-white/90 w-full z-[2] text-gray-800 transition-colors tracking-wider shadow-sm">
-          <Link className="my-auto px-2" to="/">
-            <img className="w-auto h-8" src={BucknerLogo} alt="Buckner Logo" />
-          </Link>
-        </header>
+        <Header />
 
         <div className="flex flex-col items-center justify-center flex-grow p-8">
           <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8">
@@ -562,13 +497,10 @@ const fetchRecommendations = async () => {
     )
   }
 
+  // Landing Page
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="flex flex-row h-[4.5rem] bg-white/90 w-full z-[2] text-gray-800 transition-colors hover:text-gray-600 tracking-wider shadow-sm">
-        <Link className="my-auto px-2" to="/">
-          <img className="w-auto h-8" src={BucknerLogo} alt="Buckner Logo" />
-        </Link>
-      </header>
+      <Header />
 
       <div className="flex flex-col items-center justify-center flex-grow p-8">
         <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8">

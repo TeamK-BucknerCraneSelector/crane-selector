@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import BucknerLogo from '../../assets/buckner.svg'
+import Header from '../shared/Header'
 
 interface QuoteFormProps {
   selectedCrane?: string
@@ -34,55 +33,48 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setLoading(true)
-  
-  try {
-    const response = await fetch('http://localhost:8080/api/submit-quote', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        crane: selectedCrane,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        company: formData.company,
-        projectDetails: formData.projectDetails,
-        sourceFlow: 'Request Flow' // or 'Wizard Flow' depending on which flow called this
+    e.preventDefault()
+    setLoading(true)
+    
+    try {
+      const response = await fetch('http://localhost:8080/api/submit-quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          crane: selectedCrane,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          projectDetails: formData.projectDetails,
+          sourceFlow: 'Request Flow'
+        })
       })
-    })
-    
-    const data = await response.json()
-    
-    if (response.ok && data.success) {
-      console.log('Quote submitted to Salesforce:', data)
-      onSubmit(formData)
-    } else {
-      throw new Error(data.error || 'Failed to submit quote')
+      
+      const data = await response.json()
+      
+      if (response.ok && data.success) {
+        console.log('Quote submitted to Salesforce:', data)
+        onSubmit(formData)
+      } else {
+        throw new Error(data.error || 'Failed to submit quote')
+      }
+    } catch (error) {
+      console.error('Error submitting quote:', error)
+      alert('Failed to submit quote. Please try again.')
+    } finally {
+      setLoading(false)
     }
-  } catch (error) {
-    console.error('Error submitting quote:', error)
-    alert('Failed to submit quote. Please try again.')
-  } finally {
-    setLoading(false)
   }
-}
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="flex flex-row h-[4.5rem] bg-white/90 w-full z-[2] text-gray-800 transition-colors tracking-wider shadow-sm">
-        <Link className="my-auto px-2" to="/">
-          <img className="w-auto h-8" src={BucknerLogo} alt="Buckner Logo" />
-        </Link>
-      </header>
+      <Header />
 
-      {/* Content */}
       <div className="flex flex-col items-center justify-center flex-grow p-8">
         <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8">
-          {/* Header Section */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold mb-2">Request Your Quote</h1>
             <p className="text-gray-500 mb-4">
@@ -99,7 +91,6 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
             )}
           </div>
           
-          {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col">
               <label className="block text-sm font-medium mb-2">Full Name *</label>
@@ -165,7 +156,6 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
               />
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-4 pt-4">
               <button
                 type="button"
