@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import BucknerLogo from '../../assets/buckner.svg'
+import Header from '../shared/Header'
+import ConfirmationScreen from '../shared/ConfirmationScreen'
 import QuoteForm from '../../components/QuoteForm/QuoteForm'
+
+
 
 interface CraneData {
   crane: string
@@ -21,6 +24,7 @@ interface Crane {
 }
 
 function RequestFlow() {
+  const API_URL = import.meta.env.VITE_API_URL
   const [currentStep, setCurrentStep] = useState<'landing' | 'quote' | 'confirmation'>('landing')
   const [cranes, setCranes] = useState<Crane[]>([])
   const [selectedCrane, setSelectedCrane] = useState<string>('')
@@ -34,7 +38,7 @@ function RequestFlow() {
   const fetchAvailableCranes = async () => {
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:8080/api/cranes')
+      const response = await fetch(`${API_URL}/api/cranes`)
       
       if (!response.ok) {
         throw new Error('Failed to fetch cranes')
@@ -66,60 +70,29 @@ function RequestFlow() {
     setSubmittedData(null)
   }
 
-  const renderConfirmation = () => (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="flex flex-row h-[4.5rem] bg-white/90 w-full z-[2] text-gray-800 transition-colors tracking-wider shadow-sm">
-        <Link className="my-auto px-2" to="/">
-          <img className="w-auto h-8" src={BucknerLogo} alt="Buckner Logo" />
-        </Link>
-      </header>
-      
-      <div className="flex flex-col items-center justify-center flex-grow p-8">
-        <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-5xl text-green-600">✓</span>
-          </div>
-          <h1 className="text-3xl font-bold mb-4">Quote Request Submitted!</h1>
-          <p className="text-gray-500 mb-6">
-            Thank you for your request. We'll contact you within 24 hours with a detailed quote.
-          </p>
-          
-          <div className="bg-gray-50 p-6 rounded-lg mb-6 text-left">
-            <h3 className="font-bold mb-3">Request Details:</h3>
-            <p className="mb-2"><strong>Crane:</strong> {submittedData?.crane}</p>
-            <p className="mb-2"><strong>Name:</strong> {submittedData?.name}</p>
-            <p className="mb-2"><strong>Email:</strong> {submittedData?.email}</p>
-            <p className="mb-2"><strong>Phone:</strong> {submittedData?.phone}</p>
-            {submittedData?.company && (
-              <p className="mb-2"><strong>Company:</strong> {submittedData.company}</p>
-            )}
-          </div>
+  // Confirmation Screen
+  if (currentStep === 'confirmation' && submittedData) {
+    return (
+      <ConfirmationScreen
+        craneName={submittedData.crane}
+        customerName={submittedData.name}
+        email={submittedData.email}
+        phone={submittedData.phone}
+        company={submittedData.company}
+        onStartOver={handleStartOver}
+      />
+    )
+  }
 
-          <div className="flex gap-4">
-            <button 
-              onClick={handleStartOver} 
-              className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer bg-red-700 text-white hover:bg-red-800"
-            >
-              Request Another Quote
-            </button>
-            <Link to="/" className="flex-1">
-              <button className="w-full font-semibold py-3 px-6 rounded-lg transition-colors border-2 border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer">
-                Back to Home
-              </button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+  // Quote Form
+  if (currentStep === 'quote') {
+    return <QuoteForm selectedCrane={selectedCrane} onSubmit={handleQuoteSubmit} onBack={() => setCurrentStep('landing')} />
+  }
 
-  const renderLanding = () => (
+  // Landing Page - Crane Selection
+  return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="flex flex-row h-[4.5rem] bg-white/90 w-full z-[2] text-gray-800 transition-colors tracking-wider shadow-sm">
-        <Link className="my-auto px-2" to="/">
-          <img className="w-auto h-8" src={BucknerLogo} alt="Buckner Logo" />
-        </Link>
-      </header>
+      <Header />
       
       <section className="relative h-96 bg-crane-hero bg-cover bg-center flex items-center justify-center">
         <div className="text-center text-white">
@@ -157,9 +130,9 @@ function RequestFlow() {
                 >
                   <div className="relative h-100 bg-gray-200">
                     <img 
-                      src={`http://localhost:8080/${crane.image_path}`}
+                      src={`${API_URL}/${crane.image_path}`}
                       alt={crane.model}
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-cover object-bottom"
                       onError={(e) => {
                         e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Crane+Image';
                       }}
@@ -206,16 +179,6 @@ function RequestFlow() {
       </div>
     </div>
   )
-
-  if (currentStep === 'quote') {
-    return <QuoteForm selectedCrane={selectedCrane} onSubmit={handleQuoteSubmit} onBack={() => setCurrentStep('landing')} />
-  }
-
-  if (currentStep === 'confirmation' && submittedData) {
-    return renderConfirmation()
-  }
-
-  return renderLanding()
 }
 
 export default RequestFlow
