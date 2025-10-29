@@ -18,6 +18,7 @@ interface CraneRecommendation {
   description: string
   features: string[]
   bestFor: string // Linked to projectType
+  imagePath: string
   specs: {
     maxLoad: number
     maxHeight: number
@@ -179,6 +180,7 @@ const fetchRecommendations = async () => {
         description: `Maximum load capacity of ${crane.max_load} tons with ${crane.max_height}ft height and ${crane.max_radius}ft reach capability`,
         features,
         bestFor: getBestForText(wizardData.projectType),
+        imagePath: crane.image_path,
         specs: {
           maxLoad: crane.max_load,
           maxHeight: crane.max_height,
@@ -329,8 +331,19 @@ const fetchRecommendations = async () => {
           <div className="flex flex-col gap-6 mb-8">
             {recommendations.length > 0 ? (
               recommendations.map((crane, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm p-6 grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
-                  <div className="flex flex-col gap-4">
+                <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-[auto_2fr_1fr] gap-6">
+                  
+                 <div className="relative w-full md:w-64 h-auto md:h-full bg-gray-200">
+                    <img 
+                    src={`http://localhost:8080/${crane.imagePath}`}
+                    alt={crane.name}
+                    className="w-full h-full object-cover object-bottom"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Crane';
+                    }}
+                  />
+                </div>
+  <div className="flex flex-col gap-4 p-6">
                     <div className="flex items-center gap-3 flex-wrap">
                       <h3 className="text-xl font-semibold m-0">{crane.name}</h3>
                       <Badge>{crane.tonnage}</Badge>
