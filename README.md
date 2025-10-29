@@ -27,3 +27,9 @@ Starting only frontend
 npm frontend
 ```
 
+Running backend unit tests
+```
+cd backend
+npm run test
+```
+
