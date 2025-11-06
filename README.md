@@ -119,14 +119,3 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
    - Frontend: http://localhost:5173
 
 --
-
-## Getting Your Salesforce Security Token
-
-1. Log into Salesforce
-2. Click your profile → **Settings**
-3. Search for "Reset My Security Token"
-4. Click **Reset Security Token**
-5. Check your email for the token
-6. Combine your password + token in the `.env` file (no space between them)
-
----
