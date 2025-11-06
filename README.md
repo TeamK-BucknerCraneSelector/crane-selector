@@ -54,6 +54,10 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
    docker compose down
    ```
 
+## Salesforce Backend
+
+- Data stored in the Salesforce backend will be stored under the "Crane Quote Request" App, which can be found under the App Launcher
+
 ---
 
 ## Manual Setup (Without Docker)
