@@ -39,11 +39,11 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
    To get this, go to:
    1) View Profile
    2) Settings
-   - My Personal Information > Reset My Security Token
-   - Press Reset my Security Token
-   - Check email 
-   - Append this security token to your salesforce password under PASSWORD
-   - ex: PASSWORD = yoursalesforcepasswordSECURITYTOKEN
+   3) My Personal Information > Reset My Security Token
+   4) Press Reset my Security Token
+   5) Check email 
+   6) Append this security token to your salesforce password under PASSWORD
+   7) ex: PASSWORD = yoursalesforcepasswordSECURITYTOKEN
    
    Edit `backend/.env` with the App Credientials:
    ```env
