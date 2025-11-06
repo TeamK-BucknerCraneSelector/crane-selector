@@ -36,6 +36,29 @@ Repo for our COMP523 project for our client, Buckner Heavylift Cranes
    ```
    
    **Important**: `PASSWORD` is your Salesforce password and security token combined with no space.
+   To get this, go to:
+   1) View Profile
+   2) Settings
+   - My Personal Information > Reset My Security Token
+   - Press Reset my Security Token
+   - Check email 
+   - Append this security token to your salesforce password under PASSWORD
+   - ex: PASSWORD = yoursalesforcepasswordSECURITYTOKEN
+   
+   Edit `backend/.env` with the App Credientials:
+   ```env
+   SF_CLIENT_ID=Key
+   SF_CLIENT_SECRET=SECRET
+   ```
+   Follow these steps:
+   1) Go to Setup
+   2) Go under Apps > App Manager
+   3) Scroll down to Crane Finder
+   4) Click View on the Dropdown to the far right of the app
+   5) Under API (Enable OAuth Settings), click Manage Consumer Details [Validate email if necessary]
+   6) Copy and Paste Consumer Key under SF_CLIENT_ID
+   7) Do the same with Consumer Secret under SF_CLIENT_SECRET
+   
    
 
 3. **Start the application**
