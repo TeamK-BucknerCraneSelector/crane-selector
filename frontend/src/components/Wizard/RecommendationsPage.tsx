@@ -1,5 +1,6 @@
 import { Badge } from "@radix-ui/themes"
 import Header from '../shared/Header'
+import HeroSection from "../shared/HeroSection"
 
 interface CraneRecommendation {
   name: string
@@ -41,6 +42,10 @@ function RecommendationsPage({
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
+      <HeroSection 
+        title="FIND YOUR SOLUTION"
+        height='h-72'
+      />
 
       <div className="max-w-5xl mx-auto p-8 w-full">
         <div className="text-center mb-8">
