@@ -83,7 +83,7 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
             </p>
             
             {selectedCrane && (
-              <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
+              <div className="p-4 rounded-lg" style={{ backgroundColor: '#F5E6E7', borderColor: '#D4A5A8', borderWidth: '1px', borderStyle: 'solid' }}>
                 <h4 className="font-semibold mb-1">Your Selection:</h4>
                 <p className="text-gray-700">
                   Crane: <strong>{selectedCrane}</strong>
@@ -102,7 +102,8 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
                 onChange={handleInputChange}
                 required
                 placeholder="Enter your full name"
-                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
+                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:border-transparent"
+                style={{ '--tw-ring-color': '#6B1B1F' } as React.CSSProperties}
               />
             </div>
             
@@ -115,7 +116,8 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
                 onChange={handleInputChange}
                 required
                 placeholder="Enter your email address"
-                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
+                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:border-transparent"
+                style={{ '--tw-ring-color': '#6B1B1F' } as React.CSSProperties}
               />
             </div>
             
@@ -128,7 +130,8 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
                 onChange={handleInputChange}
                 required
                 placeholder="Enter your phone number"
-                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
+                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:border-transparent"
+                style={{ '--tw-ring-color': '#6B1B1F' } as React.CSSProperties}
               />
             </div>
             
@@ -140,7 +143,8 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
                 value={formData.company}
                 onChange={handleInputChange}
                 placeholder="Enter your company name (optional)"
-                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
+                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:border-transparent"
+                style={{ '--tw-ring-color': '#6B1B1F' } as React.CSSProperties}
               />
             </div>
             
@@ -153,7 +157,8 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
                 required
                 rows={4}
                 placeholder="Please describe your project, timeline, location, and any specific requirements..."
-                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent resize-vertical font-[inherit]"
+                className="w-full py-2 px-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:border-transparent resize-vertical font-[inherit]"
+                style={{ '--tw-ring-color': '#6B1B1F' } as React.CSSProperties}
               />
             </div>
 
@@ -168,7 +173,8 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer bg-red-700 text-white hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#6B1B1F' }}
               >
                 {loading ? 'Submitting...' : 'Request Quote'}
               </button>

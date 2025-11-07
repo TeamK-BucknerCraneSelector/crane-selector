@@ -1,4 +1,5 @@
 import Header from '../shared/Header'
+import HeroSection from '../shared/HeroSection'
 
 interface WizardData {
   projectType: string
@@ -72,6 +73,10 @@ function WizardSteps({
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
+      <HeroSection 
+        title="FIND YOUR SOLUTION"
+        height='h-72'
+      />
 
       <div className="flex flex-col items-center justify-center flex-grow p-8">
         <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8">
