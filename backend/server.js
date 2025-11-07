@@ -133,7 +133,7 @@ app.post("/api/submit-quote", async (req, res) => {
     const conn = await getSalesforceConnection();
     
     // Create quote record in Salesforce
-    // Note: Replace these field API names with YOUR actual field names from Salesforce
+    // Note: Replace these field API names with  field names from Salesforce
     const quoteRecord = {
       Name: `Quote - ${name} - ${crane}`, // Record name/title
       Crane_Model__c: crane,

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Badge } from "@radix-ui/themes"
 import Header from '../shared/Header'
+import HeroSection from '../shared/HeroSection'
 
 interface WizardLandingProps {
   onStartWizard: () => void
@@ -11,19 +11,21 @@ function WizardLanding({ onStartWizard }: WizardLandingProps) {
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
 
-      <div className="flex flex-col items-center justify-center flex-grow p-8">
-        <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8">
-          <h1 className="text-3xl font-bold mb-2 text-center">Crane Finder Wizard</h1>
-          <div className="block mx-auto mb-4 text-center">
-            <Badge>Needs Guidance</Badge>
-          </div>
-          <p className="text-base text-gray-500 mb-6 text-center">
+      <HeroSection 
+        title="FIND YOUR SOLUTION"
+        height='h-72'
+      />
+
+      <div className="flex flex-col items-center justify-center flex-grow p-6">
+        <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-6">
+          <h1 className="text-2xl font-bold mb-1 text-center">Crane Finder Wizard</h1>
+          <p className="text-sm text-gray-500 mb-4 text-center">
             Answer a few questions to find the perfect crane for your project
           </p>
 
-          <div className="bg-gray-100 p-6 rounded-lg mb-6">
-            <h3 className="font-bold mb-4">How it works:</h3>
-            <ol className="pl-5 flex flex-col gap-2">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
+            <h3 className="font-bold mb-2 text-sm">How it works:</h3>
+            <ol className="pl-5 flex flex-col gap-1 text-sm">
               <li>Tell us about your project type</li>
               <li>Specify maximum weight requirements</li>
               <li>Specify required lifting height</li>
@@ -34,7 +36,7 @@ function WizardLanding({ onStartWizard }: WizardLandingProps) {
             </ol>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <button 
               onClick={onStartWizard} 
               className="w-full font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer bg-gray-700 text-white hover:bg-gray-800"
