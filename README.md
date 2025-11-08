@@ -373,6 +373,12 @@ npm install
 npm run dev
 ```
 
+Running backend unit tests
+```
+cd backend
+npm run test
+```
+
 ### Common Errors
 
 | Error | Solution |

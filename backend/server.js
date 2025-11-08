@@ -21,14 +21,24 @@ const loginUrl = process.env.LOGIN_URL;
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 
-// Verify environment variables are loaded
-if (!loginUrl || !username || !password) {
-  console.error('ERROR: Missing Salesforce environment variables!');
-  console.error('Please check your .env file contains:');
-  console.error('- LOGIN_URL');
-  console.error('- USERNAME');
-  console.error('- PASSWORD');
-  process.exit(1);
+if (require.main === module) {
+  // Verify environment variables are loaded
+  if (!loginUrl || !username || !password) {
+    console.error('ERROR: Missing Salesforce environment variables!');
+    console.error('Please check your .env file contains:');
+    console.error('- LOGIN_URL');
+    console.error('- USERNAME');
+    console.error('- PASSWORD');
+    process.exit(1);
+  } else {
+    // Start server
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+    console.log(`Salesforce Login URL: ${loginUrl}`);
+    console.log(`Salesforce Username: ${username}`);
+    });
+  }
 }
 
 // Salesforce connection instance
@@ -74,23 +84,7 @@ function distance(p1, p2) {
   );
 }
 
-// Generic test endpoint
-app.get("/api", (req, res) => {
-  res.json({ fruits: ["apple", "lemon", "strawberry", "pineapple"] });
-});
-
-// Get all available cranes
-app.get("/api/cranes", (req, res) => {
-  res.status(200).json(cranes);
-});
-
-// RECOMMENDATION ENDPOINT
-app.get("/api/recommendation", (req, res) => {
-  // Extract user requirements from query parameters
-  const weight = parseInt(req.query.weight) || 0;  // Required lifting capacity in tons
-  const height = parseInt(req.query.height) || 0;  // Required lifting height in feet
-  const radius = parseInt(req.query.radius) || 0;  // Required horizontal reach in feet
-
+function recommendation(cranes, weight, height, radius) {
   // STEP 1: FILTER SUITABLE CRANES
   // Only include cranes that meet or exceed ALL requirements
   const suitable = cranes.filter((crane) => {
@@ -110,7 +104,27 @@ app.get("/api/recommendation", (req, res) => {
   });
 
   // STEP 3: RETURN TOP 3 RECOMMENDATIONS
-  res.status(200).json(suitable.slice(0, 3));
+  return suitable.slice(0,3);
+}
+
+// Generic test endpoint
+app.get("/api", (req, res) => {
+  res.json({ fruits: ["apple", "lemon", "strawberry", "pineapple"] });
+});
+
+// Get all available cranes
+app.get("/api/cranes", (req, res) => {
+  res.status(200).json(cranes);
+});
+
+// RECOMMENDATION ENDPOINT
+app.get("/api/recommendation", (req, res) => {
+  // Extract user requirements from query parameters
+  const weight = parseInt(req.query.weight) || 0;  // Required lifting capacity in tons
+  const height = parseInt(req.query.height) || 0;  // Required lifting height in feet
+  const radius = parseInt(req.query.radius) || 0;  // Required horizontal reach in feet
+
+  res.status(200).json(recommendation(cranes, weight, height, radius));
 });
 
 /**
@@ -175,10 +189,6 @@ app.post("/api/submit-quote", async (req, res) => {
   }
 });
 
-// Start server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-  console.log(`Salesforce Login URL: ${loginUrl}`);
-  console.log(`Salesforce Username: ${username}`);
-});
+module.exports = {
+  recommendation
+}
