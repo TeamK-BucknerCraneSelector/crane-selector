@@ -46,7 +46,8 @@ function ConfirmationScreen({
           <div className="flex gap-4">
             <button 
               onClick={onStartOver} 
-              className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer bg-red-700 text-white hover:bg-red-800"
+              className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer text-white hover:opacity-90"
+              style={{ backgroundColor: '#6B1B1F' }}
             >
               Request Another Quote
             </button>
