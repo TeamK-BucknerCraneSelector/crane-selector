@@ -9,11 +9,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "strict": true
+    "strict": true,
+    "types": ["vite/client"], 
+    "allowImportingTsExtensions": true
   },
-  "include": ["src", "jest.setup.ts"],
-  "references": [
-  { "path": "./tsconfig.app.json" },
-  { "path": "./tsconfig.node.json" }
-]
+  "include": ["src"],
+  "exclude": ["**/*.test.tsx", "**/*.test.ts", "jest.setup.ts"]
 }
