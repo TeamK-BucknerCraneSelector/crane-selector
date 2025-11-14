@@ -18,4 +18,3 @@ docker tag ${BACKEND_IMAGE}:latest ${ECR_REGISTRY}/${BACKEND_IMAGE}:latest
 
 
 docker push ${ECR_REGISTRY}/${BACKEND_IMAGE}:latest
-
