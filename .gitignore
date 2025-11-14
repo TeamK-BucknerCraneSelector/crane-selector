@@ -1,7 +1,13 @@
-# Logs
+.DS_Store
 
 .env
-node_modules
+.env.local
+.env.production
+.env.development
+backend/.env
+frontend/.env
+frontend/.env.production
+!.env.example
 
-# Editor directories and files
-.DS_Store
+node_modules/
+*/node_modules/
