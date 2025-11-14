@@ -6,12 +6,7 @@ const app = express();
 
 // CORS
 const corsOptions = {
-  origin: [
-    "http://localhost:5173",           
-    "http://localhost:3000",           
-    process.env.FRONTEND_URL,          
-    /\.vercel\.app$/,                  
-  ],
+  origin: ["http://localhost:5173"],
 };
 app.use(cors(corsOptions));
 
