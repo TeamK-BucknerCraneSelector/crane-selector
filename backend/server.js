@@ -187,5 +187,6 @@ app.post("/api/submit-quote", async (req, res) => {
 module.exports = {
   recommendation,
   getSalesforceConnection,
-  __setConnection: (c) => sfConnection = c
+  __setConnection: (c) => sfConnection = c,
+  app
 }

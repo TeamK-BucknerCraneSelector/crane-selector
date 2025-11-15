@@ -2,6 +2,8 @@ jest.mock('jsforce');
 jest.mock('./cranes.json', () => mock_cranes);
 
 const jsforce = require('jsforce');
+const request = require("supertest");
+
 const mock_cranes = [
     {
         "model": "TEST CRANE 1",
@@ -33,7 +35,7 @@ const mock_cranes = [
     }
 ]
 
-const { recommendation, getSalesforceConnection, __setConnection } = require('./server');
+const { recommendation, getSalesforceConnection, __setConnection, app } = require('./server');
 
 
 describe('Crane Recommendation Algorithm', () => {
@@ -102,7 +104,7 @@ describe('Salesforce Connection', () => {
         expect(jsforce.Connection).not.toHaveBeenCalled();
     });
 
-    test('throws error if login fails', async() => {
+    test('throws error if login fails', async () => {
         const mockConn = new jsforce.Connection({ loginUrl: 'test-url' });
         mockConn.login.mockRejectedValueOnce(new Error('Login failed'));
 
@@ -110,4 +112,22 @@ describe('Salesforce Connection', () => {
 
         await expect(getSalesforceConnection()).rejects.toThrow('Login failed');
     })
+});
+
+describe('/api/cranes endpoint', () => {
+    test('returns all cranes', async () => {
+        const res = await request(app).get("/api/cranes");
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual(mock_cranes)
+    });
+});
+
+describe('/api/recommendation endpoint', () => {
+    test('handles bad inputs by setting to 0', async () => {
+        const res = await request(app).get("/api/recommendation?weight=strings&height=are&radius=bad");
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual(mock_cranes.slice(0,3));
+    });
 });
