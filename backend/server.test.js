@@ -1,5 +1,7 @@
-const { recommendation } = require('../server');
+jest.mock('jsforce');
+jest.mock('./cranes.json', () => mock_cranes);
 
+const jsforce = require('jsforce');
 const mock_cranes = [
     {
         "model": "TEST CRANE 1",
@@ -29,9 +31,12 @@ const mock_cranes = [
         "max_radius": 400,
         "image_path": "test.jpg"
     }
-];
+]
 
-describe('Recommendation Algorithm Tests', () => {
+const { recommendation, getSalesforceConnection, __setConnection } = require('./server');
+
+
+describe('Crane Recommendation Algorithm', () => {
     test('should return at most 3 cranes', () => {
         const result = recommendation(mock_cranes, 100, 100, 100);
         expect(result.length).toBe(3);
@@ -64,4 +69,45 @@ describe('Recommendation Algorithm Tests', () => {
         recommendation(mock_cranes, 100, 100, 100);
         expect(mock_cranes).toEqual(copy);
     });
+});
+
+describe('Salesforce Connection', () => {
+    beforeEach(() => {
+        __setConnection(null); // clear cached connection
+        jest.clearAllMocks();
+    });
+
+    test('logs in and returns connection when none is cached', async () => {
+        const mockConn = new jsforce.Connection({ loginUrl: 'test-url' });
+        mockConn.login.mockResolvedValueOnce();
+        mockConn.accessToken = 'fake-token';
+
+        jsforce.Connection.mockImplementation(() => mockConn);
+
+        const conn = await getSalesforceConnection();
+
+        expect(jsforce.Connection).toHaveBeenCalledWith({ loginUrl: undefined });
+        expect(mockConn.login).toHaveBeenCalled();
+        expect(conn).toEqual(mockConn);
+    });
+
+    test('returns connection if it is cached', async () => {
+        const cachedConn = { accessToken: 'abc123' };
+
+        __setConnection(cachedConn);
+
+        const conn = await getSalesforceConnection();
+
+        expect(conn).toBe(cachedConn);
+        expect(jsforce.Connection).not.toHaveBeenCalled();
+    });
+
+    test('throws error if login fails', async() => {
+        const mockConn = new jsforce.Connection({ loginUrl: 'test-url' });
+        mockConn.login.mockRejectedValueOnce(new Error('Login failed'));
+
+        jsforce.Connection.mockImplementation(() => mockConn);
+
+        await expect(getSalesforceConnection()).rejects.toThrow('Login failed');
+    })
 });
