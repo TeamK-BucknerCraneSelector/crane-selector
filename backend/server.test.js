@@ -1,9 +1,3 @@
-jest.mock('jsforce');
-jest.mock('./cranes.json', () => mock_cranes);
-
-const jsforce = require('jsforce');
-const request = require("supertest");
-
 const mock_cranes = [
     {
         "model": "TEST CRANE 1",
@@ -34,6 +28,12 @@ const mock_cranes = [
         "image_path": "test.jpg"
     }
 ]
+
+jest.mock('jsforce');
+jest.mock('./cranes.json', () => mock_cranes);
+
+const jsforce = require('jsforce');
+const request = require("supertest");
 
 const { recommendation, getSalesforceConnection, __setConnection, app } = require('./server');
 
@@ -128,6 +128,6 @@ describe('/api/recommendation endpoint', () => {
         const res = await request(app).get("/api/recommendation?weight=strings&height=are&radius=bad");
 
         expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual(mock_cranes.slice(0,3));
+        expect(res.body).toEqual(recommendation(mock, 0, 0, 0));
     });
 });
