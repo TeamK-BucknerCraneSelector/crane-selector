@@ -1,4 +1,4 @@
-const { recommendation } = require('./server');
+const { recommendation } = require('../server');
 
 const mock_cranes = [
     {
