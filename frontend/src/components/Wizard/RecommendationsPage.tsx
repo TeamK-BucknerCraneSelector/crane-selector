@@ -62,11 +62,11 @@ function RecommendationsPage({
               <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-[auto_2fr_1fr] gap-6">
                 
                 {/* Crane Image */}
-                <div className="relative w-full md:w-64 h-auto md:h-full bg-gray-200">
-                  <img 
+                <div className="relative w-full md:w-64 h-full bg-gray-200">
+                  <img
                     src={`${apiUrl}/${crane.imagePath}`}
                     alt={crane.name}
-                    className="w-full h-full object-cover object-bottom"
+                    className="w-full h-64 object-cover object-bottom"
                     onError={(e) => {
                       e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Crane';
                     }}
@@ -127,7 +127,7 @@ function RecommendationsPage({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 fixed">
           <button
             onClick={onModifyRequirements}
             className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-2 border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"

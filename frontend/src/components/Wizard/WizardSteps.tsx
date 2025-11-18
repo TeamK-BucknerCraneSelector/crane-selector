@@ -73,10 +73,6 @@ function WizardSteps({
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
-      <HeroSection 
-        title="FIND YOUR SOLUTION"
-        height='h-72'
-      />
 
       <div className="flex flex-col items-center justify-center flex-grow p-8">
         <div className="max-w-2xl w-full bg-white rounded-lg shadow-xl p-8">
@@ -87,7 +83,7 @@ function WizardSteps({
 
           {/* Progress Bar */}
           <div className="mb-8">
-            <div className="flex justify-between text-xs text-gray-500 mb-4">
+            <div className="flex justify-between text-center text-xs text-gray-500 mb-4">
               <span className={wizardStep >= 1 ? "text-gray-700 font-semibold" : ""}>Project</span>
               <span className={wizardStep >= 2 ? "text-gray-700 font-semibold" : ""}>Weight</span>
               <span className={wizardStep >= 3 ? "text-gray-700 font-semibold" : ""}>Height</span>
@@ -204,16 +200,16 @@ function WizardSteps({
           <div className="flex gap-4">
             <button 
               onClick={onWizardBack} 
-              className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-2 border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
+              className="flex-1 font-semibold py-2 px-4 rounded-lg transition-colors border-2 border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
             >
-              {wizardStep === 1 ? "← Back to Start" : "← Previous"}
+            ← Back
             </button>
             <button
               onClick={onWizardNext}
               disabled={!canProceed || loading}
-              className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-none cursor-pointer bg-gray-700 text-white hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+              className="flex-1 font-semibold py-2 px-4 rounded-lg transition-colors border-none cursor-pointer bg-gray-700 text-white hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
-              {loading ? "Loading..." : wizardStep === 5 ? "See Recommendations →" : "Next →"}
+              Next →
             </button>
           </div>
         </div>

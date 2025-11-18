@@ -162,14 +162,7 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
               />
             </div>
 
-            <div className="flex gap-4 pt-4">
-              <button
-                type="button"
-                onClick={onBack}
-                className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-2 border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
-              >
-                Back
-              </button>
+            <div className="flex flex-col gap-4 pt-4">
               <button
                 type="submit"
                 disabled={loading}
@@ -177,6 +170,13 @@ function QuoteForm({ selectedCrane, onSubmit, onBack }: QuoteFormProps) {
                 style={{ backgroundColor: '#6B1B1F' }}
               >
                 {loading ? 'Submitting...' : 'Request Quote'}
+              </button>
+              <button
+                type="button"
+                onClick={onBack}
+                className="flex-1 font-semibold py-3 px-6 rounded-lg transition-colors border-2 border-gray-300 bg-white text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
+              >
+                Back
               </button>
             </div>
           </form>
