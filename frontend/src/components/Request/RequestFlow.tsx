@@ -167,13 +167,13 @@ function RequestFlow() {
           )}
 
           {selectedCrane && (
-            <div className="flex justify-center mb-8">
+            <div className="fixed bottom-0 right-4 z-1 mb-8">
               <button
                 onClick={handleQuoteRequest}
-                className="font-semibold py-4 px-8 rounded-lg transition-colors border-none cursor-pointer text-white hover:opacity-90 text-lg"
+                className="font-semibold py-4 px-4 rounded-lg transition-colors border-none cursor-pointer text-white hover:opacity-90 text-lg"
                 style={{ backgroundColor: '#6B1B1F' }}
               >
-                Request Quote for {selectedCrane}
+                Request Quote for Crane
               </button>
             </div>
           )}
