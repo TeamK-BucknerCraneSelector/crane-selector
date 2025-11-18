@@ -1,0 +1,30 @@
+[
+    {
+        "model": "TEST CRANE 1",
+        "max_load": 100,
+        "max_height": 100,
+        "max_radius": 100,
+        "image_path": "test.jpg"
+    },
+    {
+        "model": "TEST CRANE 2",
+        "max_load": 200,
+        "max_height": 200,
+        "max_radius": 200,
+        "image_path": "test.jpg"
+    },
+    {
+        "model": "TEST CRANE 3",
+        "max_load": 300,
+        "max_height": 300,
+        "max_radius": 300,
+        "image_path": "test.jpg"
+    },
+    {
+        "model": "TEST CRANE 4",
+        "max_load": 400,
+        "max_height": 400,
+        "max_radius": 400,
+        "image_path": "test.jpg"
+    }
+]
