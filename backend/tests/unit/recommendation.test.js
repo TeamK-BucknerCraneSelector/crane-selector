@@ -1,5 +1,5 @@
 const { recommendation } = require('../../server');
-const mock_cranes = require('../../../__mocks__/cranes.json');
+const mock_cranes = require('../../mocks/cranes.json');
 
 describe('Crane Recommendation Algorithm', () => {
     test('should return at most 3 cranes', () => {
