@@ -1,37 +1,7 @@
-const { recommendation } = require('./server');
+const { recommendation } = require('../../server');
+const mock_cranes = require('../../mocks/cranes.json');
 
-const mock_cranes = [
-    {
-        "model": "TEST CRANE 1",
-        "max_load": 100,
-        "max_height": 100,
-        "max_radius": 100,
-        "image_path": "test.jpg"
-    },
-    {
-        "model": "TEST CRANE 2",
-        "max_load": 200,
-        "max_height": 200,
-        "max_radius": 200,
-        "image_path": "test.jpg"
-    },
-    {
-        "model": "TEST CRANE 3",
-        "max_load": 300,
-        "max_height": 300,
-        "max_radius": 300,
-        "image_path": "test.jpg"
-    },
-    {
-        "model": "TEST CRANE 4",
-        "max_load": 400,
-        "max_height": 400,
-        "max_radius": 400,
-        "image_path": "test.jpg"
-    }
-];
-
-describe('Recommendation Algorithm Tests', () => {
+describe('Crane Recommendation Algorithm', () => {
     test('should return at most 3 cranes', () => {
         const result = recommendation(mock_cranes, 100, 100, 100);
         expect(result.length).toBe(3);

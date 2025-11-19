@@ -107,11 +107,6 @@ function recommendation(cranes, weight, height, radius) {
   return suitable.slice(0,3);
 }
 
-// Generic test endpoint
-app.get("/api", (req, res) => {
-  res.json({ fruits: ["apple", "lemon", "strawberry", "pineapple"] });
-});
-
 // Get all available cranes
 app.get("/api/cranes", (req, res) => {
   res.status(200).json(cranes);
@@ -190,5 +185,8 @@ app.post("/api/submit-quote", async (req, res) => {
 });
 
 module.exports = {
-  recommendation
+  recommendation,
+  getSalesforceConnection,
+  __setConnection: (c) => sfConnection = c,
+  app
 }
