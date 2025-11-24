@@ -304,6 +304,12 @@ Most text is in the frontend React components. You'll need:
 
 ---
 
+## Costs & Billing
+
+The frontend hosting is on Vercel, which is free. For this application, the free tier of Vercel should more than suffice. The backend is containerized and hosted on Buckner's AWS App Runner, and will cost around $8/month.
+
+---
+
 ## Switching to Production Salesforce
 
 Currently connected to **Sandbox**. When ready for production:
